@@ -140,16 +140,13 @@ public class LunaFollower extends NPCAwareContent implements SaveableState
 				if (camp.companionsCount() > 2) outputText("s");
 				if (camp.companionsCount() > 1) outputText(" in the camp");
 				outputText(". Her ashen hair, partially concealed beneath her white hairband, perfectly completes her look.\n\n");
-				outputText("Luna’s body is average-sized, with modest but shapely C cup breasts and refreshingly normal proportions, after seeing so many distorted, oversexual forms in this world. Her thighs are modest, but plump up very pleasingly above her long white stockings when you manage to glimpse them under her dress. She wears a pair of tidy black shoes on her small feet; how she keeps them so perfectly shiny and unscuffed out here in the rocky campsite is a mystery.\n\n");
+				outputText("Luna’s body is average-sized, with shapely C cup breasts and refreshingly normal proportions, after seeing so many distorted, oversexual forms in this world. Her thighs are modest, but plump up very pleasingly above her long white stockings when you manage to glimpse them under her dress. She wears a pair of tidy black shoes on her small feet; how she keeps them so perfectly shiny and unscuffed out here in the rocky campsite is a mystery.\n\n");
 			}
 			else {
-				outputText("Luna is a werewolf maid. While she spends most of the day as a human, at night or when agitated she assumes a large wolf-morph shape. When human she wears a black regency dress with a frilly white apron and hairband, but prefers to go naked on full moon nights to avoid accidentally destroying her clothes. You know better and can sometimes spot the flash of a green glow, which is the only warning of the beast within when she assumes human shape.");
-				outputText("Her large, golden eyes are trained on you, watching you, almost unblinkingly, for the first sign of need or inconvenience. Intensity aside, her face is more sweet than classically beautiful, with small features and cute smile that shines through at odd moments");
-				if (camp.companionsCount() > 1) outputText(", though you could swear you see her making a different expression sometimes when you visit your other companion");
-				if (camp.companionsCount() > 2) outputText("s");
-				if (camp.companionsCount() > 1) outputText(" in the camp");
-				outputText(". Her ashen hair, partially concealed beneath her white hairband, perfectly completes her look, and is always carefully brushed after a full moon or other... accident, as formality demands.\n\n");
-				outputText("As a human, Luna’s body is average-sized, with modest but shapely C cup breasts and refreshingly normal proportions, after seeing so many distorted, oversexual forms in this world. Her thighs are modest, but plump up very pleasingly above her long white stockings when you manage to glimpse them under her dress. She wears a pair of tidy black shoes on her small feet; how she keeps them so perfectly shiny and unscuffed out here in the rocky campsite is a mystery. However, on the night of a full moon, she becomes a seven-foot tall wolf-morph with firm DD breasts, washboard abs, wide hips and a taut, shapely ass beneath her muscular waist, and thighs you're sure could crack walnuts. The paws at the ends of her muscular arms and legs are large and padded, with claws as big as a bear's, but her ears and tail are delightfully fuzzy. You're too polite, or perhaps afraid, to ask her to keep her stockings on during her transformation to see what her feet would look like bursting out of the ends of them, but you can and do imagine it.\n\n");
+				outputText("Luna is a werewolf maid. While she spends most of the day as a human, at night or when agitated she assumes a large wolf-morph shape. When human she wears a black regency dress with a frilly white apron and hairband, but prefers to go naked on full moon nights to avoid accidentally destroying her clothes. You can sometimes spot the flash of a green glow in her eyes, which is the only warning of the beast within when she assumes human shape.\n\n");
+				outputText("Her large, golden eyes are trained on you, watching you almost unblinkingly for the first sign of need or inconvenience. Intensity aside, her face is more sweet than classically beautiful, with small features and cute smile that shines through at odd moments");
+				if (camp.companionsCount() > 1) outputText(", though you know now not to take this as an indication of her real personality. Her ashen hair, partially concealed beneath her white hairband, perfectly completes her look, and is always carefully brushed after a full moon or other \"incident\", as formality demands.\n\n");
+				outputText("As a human, Luna’s body is average-sized, with shapely C cup breasts and refreshingly normal proportions, after seeing so many distorted, oversexual forms in this world. Her thighs are modest, but plump up very pleasingly above her long white stockings when you manage to glimpse them under her dress. She wears a pair of tidy black shoes on her small feet; how she keeps them so perfectly shiny and unscuffed out here in the rocky campsite is a mystery. When she transforms, she becomes a seven-foot tall wolf-morph with firm DD breasts, washboard abs, wide hips and a taut, shapely ass beneath her muscular waist. Her legs are muscular, with thighs you're sure could crack walnuts. Her paw-like hands and feet are large and padded, with claws as big as a bear's, but her ears and tail are delightfully fuzzy. You're too polite, or perhaps afraid, to ask her to keep her stockings on during her transformation to see what her feet would look like bursting out of the ends of them, but you can and do imagine it.\n\n");
 			}
 			doNext(camp.returnToCampUseOneHour);
 		}
@@ -180,7 +177,7 @@ public class LunaFollower extends NPCAwareContent implements SaveableState
 			outputText("Luna suddenly cuts off her increasingly impassioned speech as she looks up at you for a moment, eyebrow twitching slightly.\n\n");
 			outputText("\"<i><b>Ahem,</i></b>\" she quietly coughs as she recomposes herself, before resuming her normal tone of stoic professionalism. \"<i>Suffice to say, yes, I find my work quite satisfying, so please be at ease and make <b>full</b> use of my services, " + player.mf("Master","Mistress") + ".</i>\n\n");
 			if (flags[kFLAGS.LUNA_FOLLOWER] > 6) outputText("You could swear you see the faintest flash of green in her eyes as she finishes, but perhaps it was your imagination?\n\n");
-			if (player.cor >= 60) outputText("Of course, it's those tantalizing glimpses of her true, corrupted nature that make her so cute, you think to yourself happily... definitely happily, not nervously at all.\n\n");
+			if (player.cor >= 50) outputText("Of course, it's those tantalizing glimpses of her true, corrupted nature that make her so cute, you think to yourself happily... definitely happily, not nervously at all.\n\n");
 			lunaJealousy(-100);
 			lunaAffection(2);
 			doNext(camp.returnToCampUseOneHour);
@@ -254,7 +251,7 @@ public class LunaFollower extends NPCAwareContent implements SaveableState
 					"\"<i>I... but, I, er...</i>\" she stammers, before giving up and admitting the truth. \"<i>I apologize, " + player.mf("Master","Mistress") + ". I have no excuse' I just couldn't contain myself after being ignored for so long.</i> ");
 			if (flags[kFLAGS.LUNA_FOLLOWER] > 6) outputText("<i>Though my love for you is unconditional,</i> ")
 			outputText("<i>I am still but an employee, here to serve you just the same wherever your attentions may wander. What are my feelings as a person in the face of my duty? I will endeavor to be more professional and suppress my emotions more fully to be a better servant to you.</i>\" She bows much more deeply than usual, concealing her face.\n\n");
-			if (flags[kFLAGS.LUNA_FOLLOWER] < 6) outputText("You admit that underneath the drama she has a point, but even so you can't disregard your other companions either; after all, she is a maid, not a consort... unless she'd prefer that? Either way, you offer to spend more time with her in the future, so long as these acts of passive aggression end now. She grimaces but nods obediently. ");
+			if (flags[kFLAGS.LUNA_FOLLOWER] < 6) outputText("You admit that underneath the drama she has a point, but even so you can't disregard your other companions either; after all, she is a maid, not a consort... unless she'd prefer that? Either way, you offer to spend more time with her in the future, so long as these acts of passive aggression end now. She grimaces but nods obediently.");
 			else outputText("Inwardly you wince. Despite the dramatic presentation, her complaint hits home; she really does do a great deal for you every day without complaint or compensation besides the attention you spare her, and that attention has decreased of late, though it's hard to help when you have so many companions demanding your time. You promise Luna you will spend more time with her soon, but tell her to stop these acts of passive aggression against your campmates; if anything she should be angry with you, not them, for your inconsideration. With tears in her eyes she nods obediently, but the green glint you see glimmering in the wet drops indicates that you will likely be held to that, should you forget.");
 			player.createStatusEffect(StatusEffects.LunaWasWarned, 0,0,0,0);
 			player.removeStatusEffect(StatusEffects.LunaWasCaugh);
@@ -569,6 +566,7 @@ public class LunaFollower extends NPCAwareContent implements SaveableState
 		public function sleepingFullMoon():void {
 			outputText("You suppress the urge to close your eyes, knowing that Luna has other plans tonight. You can spot the telltale green glow in her eyes before the full moon, and she smiles coyly as she notices your gaze. She slips out of her clothes and her trim, naked form takes on a beastial shape as she sits on all fours, waiting like a dog expecting its treat.\n\n");
 			outputText(player.mf("Master","Mistress") + ", there's no need for words. You know what we both want, so let's get wild tonight, mmm?</i>\"\n\n");
+			outputText("So saying, she turns around and gets on all fours to present her drooling sex to you, turning back to look at you expectantly. You need no second urging.");
 			flags[kFLAGS.LUNA_MOONING] = 2;
 			menu();
 			addButton(0, "Dominate", sexMenuDominateHer);
@@ -585,7 +583,7 @@ public class LunaFollower extends NPCAwareContent implements SaveableState
 			else flags[kFLAGS.LUNA_FOLLOWER] = 16;
 			outputText("Luna comes over to you.\n\n");
 			outputText("\"<i>" + player.mf("Master","Mistress") + " I know that you are busy with important work, but it's been a long time since you accepted my service. I wish to remind you that should you need anything, truly <b>anything</b>, all you need to do is call me. My greatest pleasure is to serve you.</i>\"\n\n");
-			outputText("With that she leaves to prepare today's food. You feel a little guilty thinking of all the work she does for you. Perhaps you should spare her an hour today.\n\n");
+			outputText("With that she leaves to prepare today's food. You feel a little guilty thinking of all the work she does for you. Perhaps you should spare her an hour today?\n\n");
 			doNext(camp.returnToCampUseOneHour);
 		}
 
@@ -609,7 +607,7 @@ public class LunaFollower extends NPCAwareContent implements SaveableState
 						if (PCWalkedToLunaAtmaxJealousy) {
 							outputText("As you approach Luna she sighs resignedly, rising from the stone she was resting upon and pulling off her dress.\n\n" +
 									"\"<i>" + player.mf("Master","Mistress") + ", I did warn you I can only hold myself back so long. Tonight I will not take 'no' for an answer.</i>\"\n\n" +
-									"GThere's nothing for it; already ");
+									"There's nothing for it; already ");
 						}else{
 						
 						
@@ -670,11 +668,11 @@ public class LunaFollower extends NPCAwareContent implements SaveableState
 			outputText("She looks at you blankly, her mad mood suddenly gone, like a pricked bubble or a nightmare forgotten on waking, and she releases her hold on you to lean back in shock. \"<i>What? You.. you're just going to give in? Just like that, " + player.mf("Master","Mistress") + "?</i>\"\n\n");
 			outputText("Of course, you explain. You would never have denied her needs if you had known of them. There was no need for her to hide her desires; gods know you've dealt with far crazier ones by now. And, you say, she is already more than just a maid to you. You just didn’t know how to tell her. You don’t care if she's a monster; she's a beautiful monster. To her utter surprise you");
 			if (!player.isNaked()) outputText(" stand and take off your own clothes, and");
-			outputText(" display your naked body, telling her she will get exactly what she wants. She grabs you and kisses you passionately, her long, wolfish tongue invading your mouth, and soon you return it, exchanging saliva and feelings with your lupine maid, before you pull apart for the main event.\n\n");
+			outputText(" display your naked body, telling her she will get exactly what she wants. She grabs you and kisses you passionately, her long, wolfish tongue invading your mouth, and soon you return it, exchanging saliva and feelings with your lupine maid, before you pull apart for the main event. Luna gets to all fours and presents her dripping pussy to you without shame, looking back at you in eager anticipation.\n\n");
 			if (flags[kFLAGS.LUNA_FOLLOWER] == 5 || flags[kFLAGS.LUNA_FOLLOWER] == 7 || flags[kFLAGS.LUNA_FOLLOWER] == 9) flags[kFLAGS.LUNA_FOLLOWER] = 11;
 			if (flags[kFLAGS.LUNA_FOLLOWER] == 6 || flags[kFLAGS.LUNA_FOLLOWER] == 8 || flags[kFLAGS.LUNA_FOLLOWER] == 10) flags[kFLAGS.LUNA_FOLLOWER] = 12;
 			flags[kFLAGS.LUNA_MOONING] = 2;
-			doNext(sexMenuVaginalWW);
+			doNext(sexMenuDominateHer);
 		}
 		public function fullMoonEventAccept2():void {
 			spriteSelect(SpriteDb.s_Luna_Mooning);
@@ -683,11 +681,11 @@ public class LunaFollower extends NPCAwareContent implements SaveableState
 			outputText("\"<i>" + player.mf("Master","Mistress") + ",</i>\" Luna complains poutily, \"<i>if you only were so kind the rest of the time I wouldn't have to jump you in the middle of the night like this. I always feel so terrible afterward, you know. Cruel, teasing " + player.mf("Master","Mistress") + ".</i>\"\n\n");
 			outputText("Moved by a naughty impulse you respond that perhaps you <b>like</b> being jumped, then");
 			if (!player.isNaked()) outputText(" take off your clothes and");
-			outputText(" display your own naked body, visibly aroused and ready for sex. She responds with palpable ecstasy, panting and drooling with lust from both her wolfish mouths, eager for what comes next but waiting patiently on her " + player.mf("Master","Mistress") + ", just like the well-trained bitch in heat you know she is.\n\n");
+			outputText(" display your own naked body, visibly aroused and ready for sex. She responds with palpable ecstasy, presenting herself to you on all fours, eager for what comes next but waiting patiently on her " + player.mf("Master","Mistress") + ", just like the well-trained bitch in heat you know she is.\n\n");
 			if (flags[kFLAGS.LUNA_FOLLOWER] == 5 || flags[kFLAGS.LUNA_FOLLOWER] == 7 || flags[kFLAGS.LUNA_FOLLOWER] == 9) flags[kFLAGS.LUNA_FOLLOWER] = 11;
 			if (flags[kFLAGS.LUNA_FOLLOWER] == 6 || flags[kFLAGS.LUNA_FOLLOWER] == 8 || flags[kFLAGS.LUNA_FOLLOWER] == 10) flags[kFLAGS.LUNA_FOLLOWER] = 12;
 			flags[kFLAGS.LUNA_MOONING] = 2;
-			doNext(sexMenuVaginalWW);
+			doNext(sexMenuDominateHer);
 		}
 		public function fullMoonEventResist():void {
 			spriteSelect(SpriteDb.s_Luna_Mooning);
