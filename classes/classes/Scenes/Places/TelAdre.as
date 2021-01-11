@@ -1,4 +1,4 @@
-﻿package classes.Scenes.Places {
+package classes.Scenes.Places {
 import classes.*;
 import classes.GlobalFlags.kACHIEVEMENTS;
 import classes.GlobalFlags.kFLAGS;
@@ -1705,7 +1705,7 @@ public function meetingLunaFirstTime():void {
 	outputText("Unable to ignore the poor girl's distress, and against your better judgment, you decide to intervene and speak to her. Poking your nose in other people's business rarely seems to end well in Mareth, but a crying girl is a crying girl no matter what world you're in, you reflect; surely one of the great truths of the cosmos, you think profoundly.\n\n");
 	outputText("The girl starts as she hears your approach and turns to face you with her tear-stained face. You ask her what's going on.");
 	outputText("\"<i>Awawawawa-!</i> she cries, stumbling back from you a few steps. You put your palms up to indicate you mean no harm, and after she fixes you with an oddly intense stare for a moment she relaxes her guard and speaks to you in an even, professional tone; or tries, at least, as she seems still to be working through her tears.\"\n\n");
-	outputText("\"<i>M-my apologies, " + player.mf("Sir","Miss") + ", for my shameful outburst. You startled me. A-as you can see, I've just been f-f-f-f... h-had my employment terminated from the William estate.</i>\" She grits her teeth for a moment in a frightful grimace, and fresh tears fall from her eyes. After a few seconds she relaxes a bit and continues. \"<i>Mistre-I mean, Mrs. William caught her husband attempting to... to se-seduce me.</i>\" Her lips twitch and she sends a sidelong glance toward the door with a complicated expression. \"<i>B-but, of course, that wasn't my fault! I am... was, merely their lowly maid! I can only resist my Master so much... Anyway! She threw me out in a fit of jealous rage... I'm sure she must be screaming at him now. Serves him right! You heard the terrible things she called me, as if it were my fault!</i>\" As she finishes her story her tone changes from despair to anger, and her eyes glint a bit dangerously as she mentions her former Mistress.");
+	outputText("\"<i>M-my apologies, " + player.mf("Sir","Miss") + ", for my shameful outburst. You startled me. A-as you can see, I've just been f-f-f-f... h-had my employment terminated from the William estate.</i>\" She grits her teeth for a moment in a frightful grimace, and fresh tears fall from her eyes. After a few seconds she relaxes a bit and continues. \"<i>Mistre-I mean, Mrs. William caught her husband attempting to... to se-seduce me.</i>\" Her lips twitch and she sends a sidelong glance toward the door with a complicated expression. \"<i>B-but, of course, that wasn't my fault! I am... was, merely their lowly maid! I can only resist my Master so much... Anyway! She threw me out in a fit of jealous rage... I'm sure she must be screaming at him now. Serves him right! You heard the terrible things she called me, as if it were my fault!</i>\" As she finishes her story her tone changes from despair to anger, and her eyes glint a bit dangerously as she mentions her former Mistress.\n\n");
 	outputText("You tell her that sounds like an awful ordeal, and ask her if she has anywhere to go now.\n\n");
 	outputText("\"<i>I... I dont' kn-know...</i>\" She looks around for a few seconds, as if expecting to see a door opening or help arriving, then her shoulders slump and she drops to her knees. \"<i>No, I have nothing. Nothing! You heard her, she's going to have me blackballed! I'll never work as a maid again in Tel'Andre, and I don't know anywhere else but the stupid desert and terrible forest full of monsters and... aaAAAAAAAAHHHH!</i>\" She screams into her apron, pushing the cloth into her face to muffle her cry of anguish.\n\n");
 	outputText("After a few seconds of breathing heavily into her apron she exposes her face again and looks up at you once more. \"<i>I'm so sorry, kind " + player.mf("Sir","Miss") + ", you've been so good as to ask after my wellbeing and listen to my story, and I'm behaving so shamefully. I... I should go... somewhere. Perhaps the brothels will take me... if not, then maybe one of the street gangs... </i>\"");
@@ -1734,6 +1734,7 @@ public function meetingLunaFirstTimeHelp():void {
 }
 public function meetingLunaRepated():void {
 	clearOutput();
+	spriteSelect(SpriteDb.s_luna_maid);
 	outputText("As you walk the streets of Tel’Adre, you spot the human maid from before. She's holding an empty can and using it to beg for money as she sits on the side of the street. You decide not to ask about your suggestion of working at The Wet Bitch; that wouldn't be very sensitive. Instead you say hellow and walk over to her. She smiles when she sees you. If she's in this dire a situation the opportunity to hire her is likely still available. Will you reconsider?\n\n");
 	menu();
 	if (player.gems >= 100) addButton(0, "Yes", meetingLunaRepeatedYes).hint("Having a maid sounds like a great addition to your camp.");
@@ -1750,7 +1751,6 @@ public function meetingLunaRepatedNo():void {
 	doNext(telAdreMenu);
 }
 public function meetingLunaRepeatedYes():void {
-	clearOutput();
 	outputText("It feels a bit strange offering work to a domestic servant when all you have is a campground, but you ask the young woman if she might not mind coming to work for you? You're hardly wealthy but you bring in enough from adventuring to support another person, and it would be useful to have someone there to help with chores, since you spend so much time exploring.\n\n");
 	outputText("The maid, now a beggar, looks at you with tears in her eyes and an unbelieving stare, then stands up as she replies.\n\n");
 	outputText("\"<i>You.. you would hire me? Even... even in this state? Are you sure??</i>\"\n\n");
@@ -1759,6 +1759,8 @@ public function meetingLunaRepeatedYes():void {
 	doNext(meetingLunaCamp);
 }
 public function meetingLunaCamp():void {
+	clearOutput();
+	spriteSelect(SpriteDb.s_luna_maid);
 	outputText("The two of you head back to camp. The maid doesn’t comment on the fact you only have a");
 	if (flags[kFLAGS.CAMP_BUILT_CABIN] == 1) outputText(" cabin ");
 	else outputText(" tent ");
