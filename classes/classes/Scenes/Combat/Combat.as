@@ -735,31 +735,33 @@ public class Combat extends BaseContent {
 		if (player.hasStatusEffect(StatusEffects.CombatFollowerZenji) && (player.statusEffectv3(StatusEffects.CombatFollowerZenji) == 1 || player.statusEffectv3(StatusEffects.CombatFollowerZenji) == 3)) {
 			bd = buttons.add("Heal Zenji", HealZenji);
 		}
-		if (player.hasPerk(PerkLib.JobGolemancer) && flags[kFLAGS.TEMPORAL_GOLEMS_BAG] > 0) bd = buttons.add("Golems", GolemsMenu);
+		if (player.hasPerk(PerkLib.JobGolemancer) && (flags[kFLAGS.TEMPORAL_GOLEMS_BAG] > 0 || flags[kFLAGS.PERNAMENT_GOLEMS_BAG] > 0)) bd = buttons.add("Golems", GolemsMenu);
 		if (player.hasPerk(PerkLib.JobElementalConjurer) && player.statusEffectv1(StatusEffects.SummonedElementals) >= 1) bd = buttons.add("Elem.Asp", ElementalAspectsMenu);
     }
 	public function GolemsMenu():void {
 		menu();
-        if (monster.isFlying() && !player.hasPerk(PerkLib.ExpertGolemMaker)) {
-            addButtonDisabled(0, "Send T.Gol/1", "Your golems can't attack flying targets. (Only golems made by an expert golem maker can do this!)");
-            if (monster.plural) {
-				addButtonDisabled(1, "Send T.Gol/3", "Your golems can't attack flying targets. (Only golems made by an expert golem maker can do this!)");
-				addButtonDisabled(2, "Send T.Gol/5", "Your golems can't attack flying targets. (Only golems made by an expert golem maker can do this!)");
+		if (flags[kFLAGS.TEMPORAL_GOLEMS_BAG] > 0) {
+			if (monster.isFlying() && !player.hasPerk(PerkLib.ExpertGolemMaker)) {
+				addButtonDisabled(0, "Send T.Gol/1", "Your golems can't attack flying targets. (Only golems made by an expert golem maker can do this!)");
+				if (monster.plural) {
+					addButtonDisabled(1, "Send T.Gol/3", "Your golems can't attack flying targets. (Only golems made by an expert golem maker can do this!)");
+					addButtonDisabled(2, "Send T.Gol/5", "Your golems can't attack flying targets. (Only golems made by an expert golem maker can do this!)");
+				}
+				if (player.hasPerk(PerkLib.TemporalGolemsRestructuration)) addButtonDisabled(3, "KamikazeProtocol", "Your golems can't attack flying targets. (Only golems made by an expert golem maker can do this)");
 			}
-            if (player.hasPerk(PerkLib.TemporalGolemsRestructuration)) addButtonDisabled(3, "KamikazeProtocol", "Your golems can't attack flying targets. (Only golems made by an expert golem maker can do this)");
-        }
-		else {
-			addButton(0, "Send T.Gol/1", combat.pspecials.sendTemporalGolem1)
-				.hint("Send one golem from your bag to attack the enemy. <b>After attacking, the golem will fall apart and its core can shatter, leaving it unable to be reused in future!</b>");
-			if (monster.plural) {
-				if (flags[kFLAGS.TEMPORAL_GOLEMS_BAG] > 2) addButton(1, "Send T.Gol/3", combat.pspecials.sendTemporalGolem3)
-					.hint("Send three golems from your bag to attack the enemy. <b>After attacking, the golem will fall apart and its core can shatter, leaving it unable to be reused in future!</b>");
-				if (flags[kFLAGS.TEMPORAL_GOLEMS_BAG] > 4) addButton(2, "Send T.Gol/5", combat.pspecials.sendTemporalGolem5)
-					.hint("Send five golems from your bag to attack the enemy. <b>After attacking, the golem will fall apart and its core can shatter, leaving it unable to be reused in future!</b>");
+			else {
+				addButton(0, "Send T.Gol/1", combat.pspecials.sendTemporalGolem1)
+					.hint("Send one golem from your bag to attack the enemy. <b>After attacking, the golem will fall apart and its core can shatter, leaving it unable to be reused in future!</b>");
+				if (monster.plural) {
+					if (flags[kFLAGS.TEMPORAL_GOLEMS_BAG] > 2) addButton(1, "Send T.Gol/3", combat.pspecials.sendTemporalGolem3)
+						.hint("Send three golems from your bag to attack the enemy. <b>After attacking, the golem will fall apart and its core can shatter, leaving it unable to be reused in future!</b>");
+					if (flags[kFLAGS.TEMPORAL_GOLEMS_BAG] > 4) addButton(2, "Send T.Gol/5", combat.pspecials.sendTemporalGolem5)
+						.hint("Send five golems from your bag to attack the enemy. <b>After attacking, the golem will fall apart and its core can shatter, leaving it unable to be reused in future!</b>");
+				}
+				if (player.hasPerk(PerkLib.TemporalGolemsRestructuration)) addButton(3, "KamikazeProtocol", combat.pspecials.sendTemporalGolemKamikazeProtocol)
+					.hint("Send all temporal golems from your bag to attack the enemy. <b>After attacking, the golems will fall apart!</b>");
 			}
-			if (player.hasPerk(PerkLib.TemporalGolemsRestructuration)) addButton(3, "KamikazeProtocol", combat.pspecials.sendTemporalGolemKamikazeProtocol)
-				.hint("Send all temporal golems from your bag to attack the enemy. <b>After attacking, the golems will fall apart!</b>");
-        }
+		}
         if (flags[kFLAGS.PERNAMENT_GOLEMS_BAG] > 0) {
             if (monster.isFlying() && !player.hasPerk(PerkLib.GrandMasterGolemMaker)) {
 				addButtonDisabled(4, "Send P.Gol/1", "Your golems can't attack flying targets. (Only golems made by a grand-master golem maker can do this!)");
@@ -3875,12 +3877,32 @@ public class Combat extends BaseContent {
                     outputText("\n");
                 }
             }
+            //CENTAUR TIME!
+            if (player.isTaur()) {
+                if (player.lowerBody == LowerBody.HOOFED || player.lowerBody == LowerBody.CLOVEN_HOOFED){
+                    outputText("You rear up and trample your opponent with your hooves.");
+                }
+                else{
+                    outputText("You rear up and claw at your opponent with your forepaws.");
+                }
+                ExtraNaturalWeaponAttack();
+                ExtraNaturalWeaponAttack();
+                outputText("\n");
+            }
             //POUNCING FOR THE KILL
             if (player.canPounce()) {
                 outputText("You leap up at [monster a] [monster name] raking [monster him] with your hind claws twice.");
                 ExtraNaturalWeaponAttack();
                 ExtraNaturalWeaponAttack();
                 outputText("\n");
+            }
+            if (player.isFlying()){
+                if (player.hasTalonsAttack()){
+                    outputText("You rend at your opponent with your talons twice.");
+                    ExtraNaturalWeaponAttack();
+                    ExtraNaturalWeaponAttack();
+                    outputText("\n");
+                }
             }
             //DEALING WING ATTACKS
             if (player.hasAWingAttack())
@@ -4221,6 +4243,11 @@ public class Combat extends BaseContent {
             else{
                 damage += player.str;
                 damage += scalingBonusStrength() * 0.25;
+            }
+            if (player.isFlying()){
+                if (player.hasPerk(PerkLib.HarpyHollowBones)) damage *= 1.2;
+                if (player.hasPerk(PerkLib.HarpyHollowBonesEvolved)) damage *= 1.3;
+                if (player.hasPerk(PerkLib.HarpyHollowBonesEvolved)) damage *= 1.5;
             }
             if ((player.hasPerk(PerkLib.SuperStrength) || player.hasPerk(PerkLib.BigHandAndFeet)) && player.isFistOrFistWeapon()) damage *= 2;
             if (player.hasPerk(PerkLib.SpeedDemon) && player.isNoLargeNoStaffWeapon()) {
@@ -4843,6 +4870,11 @@ public class Combat extends BaseContent {
             else{
                 damage += player.str;
                 damage += scalingBonusStrength() * 0.25;
+            }
+            if (player.isFlying()){
+                if (player.hasPerk(PerkLib.HarpyHollowBones)) damage *= 1.2;
+                if (player.hasPerk(PerkLib.HarpyHollowBonesEvolved)) damage *= 1.3;
+                if (player.hasPerk(PerkLib.HarpyHollowBonesEvolved)) damage *= 1.5;
             }
             if ((player.hasPerk(PerkLib.SuperStrength) || player.hasPerk(PerkLib.BigHandAndFeet)) && player.isFistOrFistWeapon()) damage *= 2;
             if (player.hasPerk(PerkLib.SpeedDemon) && player.isNoLargeNoStaffWeapon()) {
@@ -7040,7 +7072,7 @@ public class Combat extends BaseContent {
                 player.removeStatusEffect(StatusEffects.NagaVenom);
             } else if (player.spe > 3) {
                 player.addStatusValue(StatusEffects.NagaVenom, 1, 2);
-                player.statStore.addBuffObject({"spe": player.statusEffectv1(StatusEffects.NagaVenom)}, "Poison", {text: "Poisoned!"})
+                player.statStore.addBuffObject({"spe": -player.statusEffectv1(StatusEffects.NagaVenom)}, "Poison", {text: "Poisoned!"})
             } else player.takePhysDamage(5);
             outputText("You wince in pain and try to collect yourself, [monster a] [monster name]'s venom still plaguing you.\n\n");
             player.takePhysDamage(2);
@@ -9415,7 +9447,7 @@ public class Combat extends BaseContent {
         }
         if (player.countCocksOfType(CockTypesEnum.ANEMONE) > 0) TeaseFunctionList.push(RandomTeaseAnemone);
         if (player.hasPerk(PerkLib.ElectrifiedDesire)) TeaseFunctionList.push(RandomTeaseRaiju);
-        if (player.harpyScore() >= 8) TeaseFunctionList.push(RandomTeaseHarpy);
+        if (player.harpyScore() >= 8  || player.thunderbirdScore() >= 10 || player.phoenixScore() >= 10) TeaseFunctionList.push(RandomTeaseHarpy);
         if (player.kitsuneScore() >= 8) TeaseFunctionList.push(RandomTeaseKitsune);
         if (player.hasPerk(PerkLib.BlackHeart)) TeaseFunctionList.push(RandomTeaseLustStrike);
         if (monster.hasBreasts()) TeaseFunctionList.push(RandomTeaseViolateOpponentBreast);
@@ -11122,6 +11154,9 @@ public class Combat extends BaseContent {
         }
         if (player.hasStatusEffect(StatusEffects.OniRampage)) damage *= oniRampagePowerMulti();
         if (player.hasStatusEffect(StatusEffects.Overlimit)) damage *= 2;
+        if (player.hasPerk(PerkLib.HarpyHollowBones)) damage *= 1.2;
+        if (player.hasPerk(PerkLib.HarpyHollowBonesEvolved)) damage *= 1.5;
+        if (player.hasPerk(PerkLib.HarpyHollowBonesFinalForm)) damage *= 2;
         outputText("You focus on " + monster.capitalA + monster.short + ", fold your wing and dive down, using gravity to increase the impact");
         if (player.hasPerk(PerkLib.DeathPlunge)) {
             if (player.weaponAttack < 51) damage *= (1 + (player.weaponAttack * 0.03));
@@ -11186,12 +11221,14 @@ public class Combat extends BaseContent {
             if (player.hasStatusEffect(StatusEffects.Rage) && player.statusEffectv1(StatusEffects.Rage) > 5 && player.statusEffectv1(StatusEffects.Rage) < 50) player.addStatusValue(StatusEffects.Rage, 1, 10);
             else player.createStatusEffect(StatusEffects.Rage, 10, 0, 0, 0);
         }
-        if (player.isFlying()) player.removeStatusEffect(StatusEffects.Flying);
-        if (player.hasStatusEffect(StatusEffects.FlyingNoStun)) {
-            player.removeStatusEffect(StatusEffects.FlyingNoStun);
-            player.removePerk(PerkLib.Resolute);
+        if (!player.hasPerk(PerkLib.HarpyHollowBonesFinalForm)) {
+            if (player.isFlying()) player.removeStatusEffect(StatusEffects.Flying);
+            if (player.hasStatusEffect(StatusEffects.FlyingNoStun)) {
+                player.removeStatusEffect(StatusEffects.FlyingNoStun);
+                player.removePerk(PerkLib.Resolute);
+            }
+            monster.removeStatusEffect(StatusEffects.MonsterAttacksDisabled);
         }
-        monster.removeStatusEffect(StatusEffects.MonsterAttacksDisabled);
         checkAchievementDamage(damage);
         enemyAI();
     }

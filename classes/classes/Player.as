@@ -914,7 +914,7 @@ use namespace CoC;
 		//Natural Claws (arm types and weapons that can substitude them)
 		public function haveNaturalClaws():Boolean
 		{
-			return arms.type == Arms.KITSUNE || arms.type == Arms.CAT || arms.type == Arms.DEVIL || arms.type == Arms.DISPLACER || arms.type == Arms.DRAGON || arms.type == Arms.FOX || arms.type == Arms.GARGOYLE || arms.type == Arms.LION || arms.type == Arms.WOLF || arms.type == Arms.LIZARD || arms.type == Arms.RAIJU || arms.type == Arms.RAIJU_2
+			return arms.type == Arms.SPHINX || arms.type == Arms.KITSUNE || arms.type == Arms.CAT || arms.type == Arms.DEVIL || arms.type == Arms.DISPLACER || arms.type == Arms.DRAGON || arms.type == Arms.FOX || arms.type == Arms.GARGOYLE || arms.type == Arms.LION || arms.type == Arms.WOLF || arms.type == Arms.LIZARD || arms.type == Arms.RAIJU || arms.type == Arms.RAIJU_2
 			 || arms.type == Arms.RED_PANDA || arms.type == Arms.SALAMANDER || arms.type == Arms.HYDRA || arms.type == Arms.JIANGSHI || arms.type == Arms.FROSTWYRM || arms.type == Arms.BEAR || arms.type == Arms.MANTIS || arms.type == Arms.KAMAITACHI || arms.type == Arms.SQUIRREL || arms.type == Arms.WEASEL || arms.type == Arms.WENDIGO;
 		}
 		public function haveNaturalClawsTypeWeapon():Boolean
@@ -939,9 +939,14 @@ use namespace CoC;
 				|| tail.type == Tail.GARGOYLE || tail.type == Tail.GARGOYLE_2 || tail.type == Tail.MANTICORE_PUSSYTAIL
 				|| tail.type == Tail.SCORPION || tail.type == Tail.BEE_ABDOMEN || lowerBody == LowerBody.FROSTWYRM
 				|| lowerBody == LowerBody.NAGA);}
-		public function hasNaturalWeapons():Boolean { return (haveNaturalClaws() || hasABiteAttack() || hasAWingAttack() || hasAGoreAttack() || hasATailSlapAttack() || hasPerk(PerkLib.MorphicWeaponry) || isAlraune() || isScylla() || isKraken());}
+		public function hasTalonsAttack():Boolean{
+			return lowerBody == LowerBody.HARPY;
+		}
+		public function hasNaturalWeapons():Boolean { return (haveNaturalClaws() || hasABiteAttack() || hasAWingAttack() || hasAGoreAttack() || hasATailSlapAttack() || hasTalonsAttack || hasPerk(PerkLib.MorphicWeaponry) || isAlraune() || isScylla() || isKraken() || isTaur());}
 		//Some other checks
 		public function isGoblinoid():Boolean { return (goblinScore() > 9 || gremlinScore() > 12); }
+		public function isSlime():Boolean { return (hasPerk(PerkLib.DarkSlimeCore) || hasPerk(PerkLib.SlimeCore)); }
+		public function isHarpy():Boolean { return (harpyScore() > 10 || thunderbirdScore() > 15 || phoenixScore() > 15); }
 		public function isWerewolf():Boolean { return (werewolfScore() >= 12); }
 		public function isNightCreature():Boolean { return (vampireScore() >= 10 || batScore() >= 6 || jiangshiScore() >= 20); }
 		public function isHavingEnhancedHearing():Boolean { return (ears.type == Ears.ELVEN); }	
@@ -3726,8 +3731,14 @@ use namespace CoC;
 			}
 			if (TopRace == "phoenix") {
 				if (TopScore >= 10) {
-					if (isTaur()) race = "phoenix-taur";
-					else race = "phoenix";
+					if (TopScore >= 21) {
+						if (isTaur()) race = "Greater phoenix-taur";
+						else race = "Greater phoenix";
+					}
+					else{
+						if (isTaur()) race = "phoenix-taur";
+						else race = "phoenix";
+					}
 				}
 			}
 			if (TopRace == "scylla") {
@@ -3814,22 +3825,28 @@ use namespace CoC;
 			if (TopRace == "kamaitachi") {
 				if (TopScore >= 7) {
 					if (TopScore >= 18) {
-						race = "greater kamaitachi";
+						if (isTaur()) race = "greater kamaitachi-taur";
+						else race = "greater kamaitachi";
 					} else if (TopScore >= 14) {
-						race = "kamaitachi";
+						if (isTaur()) race = "kamaitachi-taur";
+						else race = "kamaitachi";
 					} else {
-						race = "half kamaitachi";
+						if (isTaur()) race = "half kamaitachi-taur";
+						else race = "half kamaitachi";
 					}
 				}
 			}
 			if (TopRace == "ratatoskr") {
 				if (TopScore >= 6) {
 					if (TopScore >= 18) {
-						race = "ratatoskr";
+						if (isTaur()) race = "ratatoskr-taur";
+						else race = "ratatoskr";
 					} else if (TopScore >= 12) {
-						race = "squirrel morph";
+						if (isTaur()) race = "squirrel-taur";
+						else race = "squirrel morph";
 					} else {
-						race = "half squirrel morph";
+						if (isTaur()) race = "half squirrel-taur";
+						else race = "half squirrel morph";
 					}
 				}
 			}
@@ -3852,8 +3869,9 @@ use namespace CoC;
 			}
 			if (TopRace == "thunderbird") {
 				if (TopScore >= 12) {
-					if (TopScore >= 15) race = "greater thunderbird";
-					else race = "thunderbird";
+					if (TopScore >= 21) race = "greater thunderbird";
+					else if (TopScore >= 16) race = "thunderbird";
+					else race = "half thunderbird";
 				}
 			}
 			//<mod>
@@ -3960,8 +3978,13 @@ use namespace CoC;
 			}
 			if (TopRace == "siren") {
 				if (TopScore >= 10) {
-					if (isTaur()) race = "siren-taur";
-					else race = "siren";
+					if (TopScore >= 16) {
+						if (isTaur()) race = "Greater siren-taur";
+						else race = "Greater siren";
+					} else {
+						if (isTaur()) race = "siren-taur";
+						else race = "siren";
+					}
 				}
 			}
 			if (TopRace == "gargoyle") {
@@ -4154,7 +4177,12 @@ use namespace CoC;
 				internalChimeraRatingCounter -= 14;//	104-r99	119	135	152	180	199	219(potem legendary/mythical stages?)
 			if (findPerk(PerkLib.ChimericalBodyUltimateStage) >= 0)
 				internalChimeraRatingCounter -= 20;
-			if (jewelry == game.jewelries.EZEKIELS) internalChimeraRatingCounter -= 1;
+			if (jewelryName == "Ezekiel's Signet") internalChimeraRatingCounter -= 1;
+			if (jewelryName2 == "Ezekiel's Signet") internalChimeraRatingCounter -= 1;
+			if (jewelryName3 == "Ezekiel's Signet") internalChimeraRatingCounter -= 1;
+			if (jewelryName4 == "Ezekiel's Signet") internalChimeraRatingCounter -= 1;
+			if (headjewelryName == "Ezekiel's Crown") internalChimeraRatingCounter -= 4;
+			if (necklaceName == "Ezekiel's Necklace") internalChimeraRatingCounter -= 5;
 			if (flags[kFLAGS.GAME_DIFFICULTY] == 0) internalChimeraRatingCounter -= 3;//6
 			//if (flags[kFLAGS.GAME_DIFFICULTY] == 1) internalChimeraRatingCounter -= 3;//tyle ile stopni perków rasowych
 			if (internalChimeraRatingCounter < 0 || flags[kFLAGS.EASY_MODE_ENABLE_FLAG] == 1) internalChimeraRatingCounter = 0;
@@ -4598,7 +4626,7 @@ use namespace CoC;
 				grandchimeraCounter++;
 			if (orcScore() >= 11)
 				grandchimeraCounter++;
-*/			if (thunderbirdScore() >= 15)
+*/			if (thunderbirdScore() >= 16)
 				grandchimeraCounter++;
 			if (mouseScore() >= 12 && arms.type == Arms.HINEZUMI && lowerBody == LowerBody.HINEZUMI)
 				grandchimeraCounter++;
@@ -6815,20 +6843,24 @@ use namespace CoC;
 			if (hairType == Hair.FEATHER)
 				harpy++;
 			if (wings.type == Wings.FEATHERED_LARGE)
-				harpy += 2;
+				harpy += 4;
 			if (tailType == Tail.HARPY)
 				harpy++;
-			if (tailType == Tail.SHARK || tailType == Tail.SALAMANDER)
-				harpy -= 5;
 			if (lowerBody == LowerBody.HARPY)
 				harpy++;
-			if (lowerBody == LowerBody.SALAMANDER)
-				harpy--;
 			if (harpy >= 2 && faceType == Face.HUMAN)
 				harpy++;
-			if (faceType == Face.SHARK_TEETH)
-				harpy--;
 			if (harpy >= 2 && (ears.type == Ears.HUMAN || ears.type == Ears.ELFIN))
+				harpy++;
+			if (hasCoatOfType(Skin.COVERAGE_NONE))
+				harpy++;
+			if (hasPerk(PerkLib.HarpyWomb))
+				harpy++;
+			if (hasPerk(PerkLib.HarpyHollowBones))
+				harpy++;
+			if (hasPerk(PerkLib.HarpyHollowBonesEvolved))
+				harpy++;
+			if (hasPerk(PerkLib.HarpyHollowBonesFinalForm))
 				harpy++;
 			if (findPerk(PerkLib.ChimericalBodyUltimateStage) >= 0)
 				harpy += 50;
@@ -6837,7 +6869,10 @@ use namespace CoC;
 			if (findPerk(PerkLib.AscensionCruelChimerasThesis) >= 0 && harpy >= 8)
 				harpy += 1;
 			if (isGargoyle()) harpy = 0;
+			if (tailType == Tail.SHARK || tailType == Tail.SALAMANDER || lowerBody == LowerBody.SALAMANDER || faceType == Face.SHARK_TEETH)
+				harpy = 0;
 			if (hasPerk(PerkLib.ElementalBody)) harpy = 0;
+			if (wings.type == Wings.FEATHERED_PHOENIX || tail.type == Tail.THUNDERBIRD) harpy = 0;
 			harpy = finalRacialScore(harpy, Race.HARPY);
 			End("Player","racialScore");
 			return harpy;
@@ -7431,7 +7466,7 @@ use namespace CoC;
 			if (arms.type == Arms.HARPY)
 				thunderbirdCounter++;
 			if (wings.type == Wings.FEATHERED_LARGE)
-				thunderbirdCounter += 2;
+				thunderbirdCounter += 4;
 			if (lowerBody == LowerBody.HARPY)
 				thunderbirdCounter++;
 			if (tailType == Tail.THUNDERBIRD)
@@ -7450,11 +7485,19 @@ use namespace CoC;
 				thunderbirdCounter++;
 			if (findPerk(PerkLib.HeartOfTheStormFinalForm) >= 0)
 				thunderbirdCounter++;
-			if (findPerk(PerkLib.HeartOfTheStorm) >= 0 && findPerk(PerkLib.ChimericalBodySemiImprovedStage) >= 0)
+			if (findPerk(PerkLib.HarpyWomb) >= 0)
 				thunderbirdCounter++;
-			if (findPerk(PerkLib.HeartOfTheStormEvolved) >= 0 && findPerk(PerkLib.ChimericalBodySemiSuperiorStage) >= 0)
+			if (findPerk(PerkLib.HarpyHollowBones) >= 0)
 				thunderbirdCounter++;
-			if (findPerk(PerkLib.HeartOfTheStormFinalForm) >= 0 && findPerk(PerkLib.ChimericalBodySemiEpicStage) >= 0)
+			if (findPerk(PerkLib.HarpyHollowBonesEvolved) >= 0)
+				thunderbirdCounter++;
+			if (findPerk(PerkLib.HarpyHollowBonesFinalForm) >= 0)
+				thunderbirdCounter++;
+			if ((findPerk(PerkLib.HeartOfTheStorm) >= 0 || findPerk(PerkLib.HarpyHollowBones) >= 0) && findPerk(PerkLib.ChimericalBodySemiImprovedStage) >= 0)
+				thunderbirdCounter++;
+			if ((findPerk(PerkLib.HeartOfTheStormEvolved) >= 0 || findPerk(PerkLib.HarpyHollowBonesEvolved) >= 0) && findPerk(PerkLib.ChimericalBodySemiSuperiorStage) >= 0)
+				thunderbirdCounter++;
+			if ((findPerk(PerkLib.HeartOfTheStormFinalForm) >= 0 || findPerk(PerkLib.HarpyHollowBonesFinalForm) >= 0) && findPerk(PerkLib.ChimericalBodySemiEpicStage) >= 0)
 				thunderbirdCounter++;
 			if (findPerk(PerkLib.ChimericalBodyUltimateStage) >= 0)
 				thunderbirdCounter += 50;
@@ -7796,6 +7839,8 @@ use namespace CoC;
 				salamanderCounter += 1;
 			if (isGargoyle()) salamanderCounter = 0;
 			if (hasPerk(PerkLib.ElementalBody)) salamanderCounter = 0;
+			if (wings.type == Wings.FEATHERED_PHOENIX)
+				salamanderCounter = 0;
 			salamanderCounter = finalRacialScore(salamanderCounter, Race.SALAMANDER);
 			End("Player","racialScore");
 			return salamanderCounter;
@@ -8611,19 +8656,19 @@ use namespace CoC;
 			Begin("Player","racialScore","phoenix");
 			var phoenixCounter:Number = 0;
 			if (wings.type == Wings.FEATHERED_PHOENIX)
-				phoenixCounter++;
+				phoenixCounter += 4;
 			if (arms.type == Arms.PHOENIX)
 				phoenixCounter++;
 			if (hairType == Hair.FEATHER) {
 				phoenixCounter++;
-				if (faceType == Face.HUMAN && phoenixCounter > 2)
+				if ((faceType == Face.HUMAN || faceType == Face.SALAMANDER_FANGS) && phoenixCounter > 2)
 					phoenixCounter++;
-				if (ears.type == Ears.HUMAN && phoenixCounter > 2)
+				if (ears.type == Ears.HUMAN || ears.type == Ears.ELFIN || ears.type == Ears.LIZARD || ears.type == Ears.DRAGON && phoenixCounter > 2)
 					phoenixCounter++;
 			}
 			if (eyes.type == Eyes.REPTILIAN)
 				phoenixCounter++;
-			if (lowerBody == LowerBody.SALAMANDER)
+			if (lowerBody == LowerBody.SALAMANDER || lowerBody == LowerBody.HARPY)
 				phoenixCounter++;
 			if (tailType == Tail.SALAMANDER)
 				phoenixCounter++;
@@ -8632,6 +8677,20 @@ use namespace CoC;
 			if (lizardCocks() > 0)
 				phoenixCounter++;
 			if (findPerk(PerkLib.PhoenixFireBreath) >= 0)
+				phoenixCounter++;
+			if (hasPerk(PerkLib.HarpyWomb))
+				phoenixCounter++;
+			if (hasPerk(PerkLib.HarpyHollowBones))
+				phoenixCounter++;
+			if (hasPerk(PerkLib.HarpyHollowBonesEvolved))
+				phoenixCounter++;
+			if (hasPerk(PerkLib.HarpyHollowBonesFinalForm))
+				phoenixCounter++;
+			if (hasPerk(PerkLib.SalamanderAdrenalGlands))
+				phoenixCounter++;
+			if (hasPerk(PerkLib.SalamanderAdrenalGlandsEvolved))
+				phoenixCounter++;
+			if (hasPerk(PerkLib.SalamanderAdrenalGlandsFinalForm))
 				phoenixCounter++;
 			if (findPerk(PerkLib.ChimericalBodyUltimateStage) >= 0)
 				phoenixCounter += 50;
@@ -8642,6 +8701,7 @@ use namespace CoC;
 			if (isGargoyle()) phoenixCounter = 0;
 			if (hasPerk(PerkLib.ElementalBody)) phoenixCounter = 0;
 			phoenixCounter = finalRacialScore(phoenixCounter, Race.PHOENIX);
+			if (wings.type != Wings.FEATHERED_PHOENIX) phoenixCounter = 0;
 			End("Player","racialScore");
 			return phoenixCounter;
 		}
@@ -9015,7 +9075,7 @@ use namespace CoC;
 			if (tailType == Tail.SHARK)
 				sirenCounter++;
 			if (wings.type == Wings.FEATHERED_LARGE)
-				sirenCounter += 2;
+				sirenCounter += 4;
 			if (arms.type == Arms.HARPY)
 				sirenCounter++;
 			if (lowerBody == LowerBody.SHARK)
@@ -9025,6 +9085,12 @@ use namespace CoC;
 			if (gills.type == Gills.FISH)
 				sirenCounter++;
 			if (eyes.type == Eyes.HUMAN)
+				sirenCounter++;
+			if (hasPerk(PerkLib.HarpyHollowBones))
+				sirenCounter++;
+			if (hasPerk(PerkLib.HarpyHollowBonesEvolved))
+				sirenCounter++;
+			if (hasPerk(PerkLib.HarpyHollowBonesFinalForm))
 				sirenCounter++;
 			if (findPerk(PerkLib.ChimericalBodyUltimateStage) >= 0)
 				sirenCounter += 50;
@@ -9937,6 +10003,8 @@ use namespace CoC;
 			if (findPerk(PerkLib.LizanMarrow) >= 0)
 				bonesandmarrowMutations--;
 			if (findPerk(PerkLib.DraconicBones) >= 0)
+				bonesandmarrowMutations--;
+			if (findPerk(PerkLib.HarpyHollowBones) >= 0)
 				bonesandmarrowMutations--;
 			if (findPerk(PerkLib.AscensionAdditionalOrganMutation01) >= 0)
 				bonesandmarrowMutations++;
@@ -11278,7 +11346,12 @@ use namespace CoC;
 				}
 			}//+10/10-20
 			if (harpyScore() >= 4) {
-				if (harpyScore() >= 8) {
+				if (harpyScore() >= 15) {
+					maxTouCap2 -= 30;
+					maxSpeCap2 += 150;
+					maxLibCap2 += 105;
+				}
+				else if (harpyScore() >= 8) {
 					maxTouCap2 -= 20;
 					maxSpeCap2 += 80;
 					maxLibCap2 += 60;
@@ -11330,9 +11403,16 @@ use namespace CoC;
 				}
 			}
 			if (sirenScore() >= 10) {
-				maxStrCap2 += 40;
-				maxSpeCap2 += 70;
-				maxIntCap2 += 40;
+				if (sirenScore() >= 16) {
+					maxStrCap2 += 70;
+					maxTouCap2 += 100;
+					maxSpeCap2 += 70;
+				}
+				else {
+					maxStrCap2 += 40;
+					maxSpeCap2 += 70;
+					maxIntCap2 += 40;
+				}
 			}//+20/10-20
 			if (orcaScore() >= 6) {
 				if (orcaScore() >= 20) {
@@ -11453,14 +11533,19 @@ use namespace CoC;
 				}
 			}//+10/10-20
 			if (thunderbirdScore() >= 12) {
-				if (thunderbirdScore() >= 15) {
+				if (thunderbirdScore() >= 21) {
+					maxTouCap2 -= 25;
+					maxSpeCap2 += 155;
+					maxLibCap2 += 185;
+				}
+				else if (thunderbirdScore() >= 16) {
 					maxTouCap2 -= 20;
-					maxSpeCap2 += 115;
-					maxLibCap2 += 130;
+					maxSpeCap2 += 120;
+					maxLibCap2 += 140;
 				}
 				else {
-					maxTouCap2 -= 20;
-					maxSpeCap2 += 100;
+					maxTouCap2 -= 15;
+					maxSpeCap2 += 95;
 					maxLibCap2 += 100;
 				}
 			}//+10/10-20
@@ -11704,10 +11789,18 @@ use namespace CoC;
 				maxIntCap2 += 75;
 			}//+(30)55/(30-40)50-60
 			if (phoenixScore() >= 10) {
-				maxStrCap2 += 20;
-				maxTouCap2 += 20;
-				maxSpeCap2 += 70;
-				maxLibCap2 += 40;
+				if (phoenixScore() >= 21) {
+					maxStrCap2 += 40;
+					maxTouCap2 += 20;
+					maxSpeCap2 += 150;
+					maxLibCap2 += 105;
+				}
+				else{
+					maxStrCap2 += 20;
+					maxTouCap2 += 20;
+					maxSpeCap2 += 70;
+					maxLibCap2 += 40;
+				}
 			}//+30/30-40
 			if (scyllaScore() >= 4 && (isScylla() || isKraken())) {
 				if (scyllaScore() >= 12 && isKraken()) {
@@ -13069,6 +13162,19 @@ use namespace CoC;
 			soulforce += maxSoulforce() * 0.04;
 			if (soulforce > maxSoulforce()) soulforce = maxSoulforce();
 			outputText(" You feel slightly more alive from the soulforce you vampirised from your sexual partner orgasm.");
+		}
+
+		public function hasUniquePregnancy():Boolean{
+			if (isSlime() || isHarpy() || isGoblinoid()) return true;
+			else return false;
+		}
+
+		public function impregnationRacialCheck():void
+		{
+		    if (isGoblinoid()) knockUp(PregnancyStore.PREGNANCY_GOBLIN, PregnancyStore.INCUBATION_GOBLIN);
+			else if (isSlime()) knockUp(PregnancyStore.PREGNANCY_GOO_GIRL, PregnancyStore.INCUBATION_GOO_GIRL);
+			else if (isHarpy()) knockUp(PregnancyStore.PREGNANCY_OVIELIXIR_EGGS, PregnancyStore.INCUBATION_OVIELIXIR_EGGS); //until we get a real harpy knock up
+			else if (isAlraune()) knockUp(PregnancyStore.PREGNANCY_ALRAUNE, PregnancyStore.INCUBATION_ALRAUNE);
 		}
 
 		protected override function maxHP_base():Number {

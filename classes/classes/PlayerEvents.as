@@ -885,7 +885,7 @@ public class PlayerEvents extends BaseContent implements TimeAwareInterface {
 				}
 				if (player.hasStatusEffect(StatusEffects.AdventureGuildQuests4)) {
 					if (player.statusEffectv1(StatusEffects.AdventureGuildQuests4) > 4) player.addStatusValue(StatusEffects.AdventureGuildQuests3, 1, -3);
-					if (player.statusEffectv2(StatusEffects.AdventureGuildQuests4) > 6) player.addStatusValue(StatusEffects.AdventureGuildQuests3, 2, -3);
+					if (player.statusEffectv2(StatusEffects.AdventureGuildQuests4) > 4) player.addStatusValue(StatusEffects.AdventureGuildQuests3, 2, -3);
 				}
 				if (flags[kFLAGS.AURORA_LVL] > 0.3 && flags[kFLAGS.AURORA_LVL] < 0.7) flags[kFLAGS.AURORA_LVL] += 0.05;
 				//Zenji training conuters
@@ -1280,7 +1280,8 @@ public class PlayerEvents extends BaseContent implements TimeAwareInterface {
 					needNext = true;
 				}
 			}
-			//Insane/corrupted Kitsune warning //Help why isn't this being called.
+			/*
+			//Insane/corrupted Kitsune warning //No longer in dev. Just didn't work with the theme.
 			if (player.findPerk(PerkLib.DarkenedKitsune) >= 0 && player.inte/player.intStat.max <= 0.85 && flags[kFLAGS.DARKKITSUNE_WARN_INT] != 1){ //warning at 15 % loss. Considering by the time you get to kitsune tier, you should probably have a decent amount of each, 15% margin should be good.
 				SceneLib.darkenedKitsuneScene.splitPersonalityWarning(1)
 				flags[kFLAGS.DARKKITSUNE_WARN_INT] = 1;
@@ -1291,12 +1292,13 @@ public class PlayerEvents extends BaseContent implements TimeAwareInterface {
 				flags[kFLAGS.DARKKITSUNE_WARN_WIS] = 1;
 				needNext = true;
 			}
-			//Insane/corrupted Kitsune random events //Help why isn't this being called.
-			if (player.findPerk(PerkLib.DarkenedKitsune) >= 0){
-				//if (rand(5)==0){
+			//Insane/corrupted Kitsune random events
+			if (player.findPerk(PerkLib.DarkenedKitsune) >= 0) {
+				if (rand(5)==0){
 				SceneLib.darkenedKitsuneScene.splitPersonalityRandom()
+				}
+				SceneLib.darkenedKitsuneScene.splitPersonalityStatchange()
 				needNext = true;
-				//}
 			}
 			//Insane/corrupted Kitsune perk
 			if (player.kitsuneScore() >= 9 ){
@@ -1326,6 +1328,10 @@ public class PlayerEvents extends BaseContent implements TimeAwareInterface {
 				flags[kFLAGS.DARKKITSUNE_WARN_INT] = 0;
 				flags[kFLAGS.DARKKITSUNE_WARN_WIS] = 0;
 				needNext = true;
+			}
+			*/
+			if (player.findPerk(PerkLib.DarkenedKitsune) >=0){ //Just in case someone else has it, this will remove it. No longer in use. Read above.
+				player.removePerk(PerkLib.DarkenedKitsune);
 			}
 			//Kitsune energy thirst
 			if (player.hasStatusEffect(StatusEffects.KitsuneEnergyThirstFeed)) {
@@ -1367,14 +1373,14 @@ public class PlayerEvents extends BaseContent implements TimeAwareInterface {
 				needNext = true;
 			}
 			//Lustzerker perk
-			if ((player.tailType == Tail.SALAMANDER && player.lowerBody == LowerBody.SALAMANDER && player.arms.type == Arms.SALAMANDER) || (player.findPerk(PerkLib.Lustzerker) < 0 && player.findPerk(PerkLib.SalamanderAdrenalGlands) >= 0)) { //Check for gain of lustzerker - requires legs, arms and tail
+			if ((player.salamanderScore() >= 9 || player.phoenixScore() >= 10) && (!player.hasPerk(PerkLib.Lustzerker))) { //Check for gain of lustzerker - requires legs, arms and tail
 				if (player.findPerk(PerkLib.Lustzerker) < 0) {
 					outputText("\nAfter drinking the last drop another hip flask of firewater you starts to feel a weird, maybe slightly unpleasant feeling inside your body.  Like many tiny flames cursing inside your veins making you ponder whats just happening with your body.  Remembering about salamanders natural talent to enter a berserk-like state you quess that should be it.\n\n(<b>Gained Perk: Lustzerker</b>)");
 					player.createPerk(PerkLib.Lustzerker, 0, 0, 0, 0);
 					needNext = true;
 				}
 			}
-			else if (player.tailType != Tail.SALAMANDER && player.lowerBody != LowerBody.SALAMANDER && player.arms.type != Arms.SALAMANDER && player.findPerk(PerkLib.Lustzerker) >= 0 && player.perkv4(PerkLib.Lustzerker) == 0 && player.findPerk(PerkLib.SalamanderAdrenalGlands) < 0) { //Remove lustzerker perk if not meeting requirements
+			else if ((player.salamanderScore() < 9 || player.phoenixScore() < 10) && player.findPerk(PerkLib.Lustzerker) >= 0 && player.perkv4(PerkLib.Lustzerker) == 0 && player.findPerk(PerkLib.SalamanderAdrenalGlands) < 0) { //Remove lustzerker perk if not meeting requirements
 				outputText("\nAll of sudden something change inside your body.  You think about a long while, until it dawned on you.  You can't feel that slight warm feeling inside your body anymore meaning for now no more lustzerking.\n\n(<b>Lost Perk: Lustzerker</b>)");
 				player.removePerk(PerkLib.Lustzerker);
 				needNext = true;
@@ -1499,7 +1505,7 @@ public class PlayerEvents extends BaseContent implements TimeAwareInterface {
 				outputText(")</b>\n");
 				needNext = true;
 			}
-			if ((player.sirenScore() >=  10 || player.harpyScore() >=  8) && !player.hasPerk(PerkLib.HarpySong)) {
+			if ((player.sirenScore() >=  10 || player.harpyScore() >=  8 || player.phoenixScore() >=  10 || player.thunderbirdScore() >=  10) && !player.hasPerk(PerkLib.HarpySong)) {
 				outputText("\n Your voice sound like magicaly entrancing music to your ears now, it would seem you have gained the infamous magicaly compeling voices common to harpies. <b>Gained Perks: Harpy Song</b>)\n");
 				player.createPerk(PerkLib.HarpySong, 0, 0, 0, 0);
 				needNext = true;
@@ -1510,7 +1516,7 @@ public class PlayerEvents extends BaseContent implements TimeAwareInterface {
 				player.removePerk(PerkLib.MelkieSong);
 				needNext = true;
 			}
-			if (player.sirenScore() < 10 && player.harpyScore() < 8 && player.hasPerk(PerkLib.HarpySong) && !player.hasPerk(PerkLib.MelkieLung)) {
+			if (player.sirenScore() < 10 && player.harpyScore() < 8 && player.phoenixScore() < 10 && player.thunderbirdScore() <  10 && player.hasPerk(PerkLib.HarpySong) && !player.hasPerk(PerkLib.HarpyHollowBones)) {
 				outputText("\n Your voice no longer carries the magical power it used to and thus you are no longer able to use your compelling aria. <b>Lost Perks: Harpy Song</b>)\n");
 				player.removePerk(PerkLib.HarpySong);
 				needNext = true;
@@ -2185,12 +2191,24 @@ public class PlayerEvents extends BaseContent implements TimeAwareInterface {
 				needNext = true;
 			}
 			//Harpy
-			if (player.lowerBody == LowerBody.HARPY && player.tailType == Tail.HARPY && player.findPerk(PerkLib.HarpyWomb) >= 0) { //Make eggs big if harpied!
+			if ((player.lowerBody == LowerBody.HARPY || player.lowerBody == LowerBody.SALAMANDER) && (player.tailType == Tail.HARPY || player.tailType == Tail.THUNDERBIRD || player.tailType == Tail.SALAMANDER) && player.findPerk(PerkLib.HarpyWomb) >= 0) { //Make eggs big if harpied!
 				if (player.hasStatusEffect(StatusEffects.Eggs) && player.statusEffectv2(StatusEffects.Eggs) == 0) {
 					player.changeStatusValue(StatusEffects.Eggs, 2, 1);
 					outputText("\n<b>A familiar, motherly rumble lets you know that your harpy-like womb is growing your eggs nice and large.</b>\n");
 					needNext = true;
 				}
+			}
+			//Pregomania
+			if(player.isPregnant() && (player.isHarpy() || player.isGoblinoid()) && !player.statStore.hasBuff("Pregomania")){
+				player.statStore.removeBuffs("Impregnate me!!!");
+				player.statStore.addBuffObject({"tou.mult":0.20,"lib.mult":0.20}, "Pregomania",{text:"Your motherly instincs gives you increased resiliance and resolve."});
+				outputText("\nYou pat your belly in motherly delight instinctively knowing that you have been impregnated. Your body seldom radiates motherly wellbeing making you hardyer in order to protect your beloved children to be.\n");
+			}
+			if(!player.isPregnant() && (player.isHarpy() || player.isGoblinoid()) && player.statStore.hasBuff("Pregomania")){
+				player.statStore.removeBuffs("Pregomania");
+				outputText("\nNo longuer pregnant you feel a void in your belly as the need to be impregnated again claw at your mind.\n");
+				player.statStore.addBuffObject({lib:50}, "Impregnate me!!!",{text:"You strongly desire to be impregnated."});
+
 			}
 			if (player.hasCock() && player.cocks[0].cockType == CockTypesEnum.BEE) { //All the hourly bee cock checks except the 'seek out the bee girl' check. That's in timeChangeLarge
 				if (player.cocks.length > 1) {

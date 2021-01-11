@@ -297,6 +297,15 @@ public class PerkLib
 		public static const ElementalBody:PerkType = mk("Elemental", "Elemental",
 				"You are currently in elemental form.",
 				"You are currently in elemental form.");
+		public static const HarpyHollowBones:PerkType = mk("Harpy Hollow Bones", "Harpy Hollow Bones",
+				"Your bones are hollow like those of a harpy granting you 20% increased physical damage when flying and increasing speed at the expense of toughness. Also allows to keep Harpy song.",
+				"You've chosen the 'Harpy Hollow Bones' perk. Increase damage while flying by 20% and increasing speed at the expense of toughness.").withBuffs({'tou.mult':-0.05,'spe.mult':0.20});
+		public static const HarpyHollowBonesEvolved:PerkType = mk("Harpy Hollow Bones (Evolved)", "Harpy Hollow Bones (Evolved)",
+				"Your bones are hollow like those of a harpy granting you an additionnal 30% increased physical damage when flying and increasing speed at the expense of toughness. Increase flying evasiveness by 10%.",
+				"You've chosen the 'Harpy Hollow Bones (Evolved)' perk. Further Increase damage while flying by 30% and increasing speed at the expense of toughness. Increase flying evasiveness by 10%.").withBuffs({'tou.mult':-0.05,'speed.mult':0.25});
+		public static const HarpyHollowBonesFinalForm:PerkType = mk("Harpy Hollow Bones (Final Form)", "Harpy Hollow Bones (Final Form)",
+				"Your bones are hollow like those of a harpy granting you an additionnal 30% increased physical damage when flying and increasing speed at the expense of toughness. Increase great dive damage by 50%.",
+				"You've chosen the 'Harpy Hollow Bones (Final Form)' perk. Further Increase damage while flying by 50% and increasing speed at the expense of toughness. Increase great dive damage by 50% and no longuer cause it to end flight.").withBuffs({'tou.mult':-0.05,'speed.mult':0.45});
 		public static const HeartOfTheStorm:PerkType = mk("Heart of the storm", "Heart of the storm",
 				"Increase the power of all Wind and Lightning racial abilities.",
 				"You've chosen the 'Heart of the storm' perk. Increase the power of all Wind and Lightning racial abilities.").withBuffs({'speed.mult':0.05});
@@ -3331,7 +3340,7 @@ public class PerkLib
 		public static const EnlightenedNinetails:PerkType = mk("Enlightened Nine-tails", "Enlightened Nine-tails",
 				"The mystical energy of the nine-tails surges through you, filling you with phenomenal cosmic power!  Your boundless magic allows you to recover quickly after casting spells.",null,true);
 		public static const EzekielBlessing:PerkType = mk("Ezekiel Blessing", "Ezekiel Blessing",
-				"You've recived blessing of Ezekiel enhancing your body and mind. +10 to all stats.").withBuffs({'sens':10}, false);
+				"You've received the blessing of Ezekiel, enhancing your body and mind. +10 to all stats.").withBuffs({'sens':10}, false);
 		public static const Feeder:PerkType = mk("Feeder", "Feeder",
 				"Lactation does not decrease and gives a compulsion to breastfeed others.");
 		public static const FenrirSpikedCollar:PerkType = mk("Fenrir's Gleipnir Collar", "Fenrir's Gleipnir Collar",
@@ -5724,6 +5733,9 @@ public class PerkLib
 				.requireCustomFunction(function (player:Player):Boolean {
                 return player.mouseScore() >= 12;
             }, "Mouse race");
+			HarpyHollowBones.requireBonesAndMarrowMutationSlot().requireCustomFunction(function (player:Player):Boolean {
+				return player.harpyScore() >= 6 || player.sirenScore() >= 10 || player.thunderbirdScore() >= 10 || player.phoenixScore() >= 10 || player.couatlScore() >= 11;
+			}, "Harpy winged race");
 			HeartOfTheStorm.requireHeartMutationSlot().requireCustomFunction(function (player:Player):Boolean {
 				return player.raijuScore() >= 6 || player.thunderbirdScore() >= 10 || player.kamaitachiScore() >= 10 || player.couatlScore() >= 11;
 			}, "Stormborn race");
@@ -5795,7 +5807,7 @@ public class PerkLib
                 return player.ratatoskrScore() >= 4;
             }, "Squirrel/Ratatoskr race");
             SalamanderAdrenalGlands.requireAdrenalGlandsMutationSlot().requirePerk(Lustzerker).requireCustomFunction(function (player:Player):Boolean {
-                return player.salamanderScore() >= 4;
+                return player.salamanderScore() >= 8 || player.phoenixScore() >= 10;
             }, "Salamander race");
             ScyllaInkGlands.requirePerk(InkSpray).requireCustomFunction(function (player:Player):Boolean {
                 return player.scyllaScore() >= 5;
@@ -5905,6 +5917,9 @@ public class PerkLib
 				.requireCustomFunction(function (player:Player):Boolean {
                 return player.mouseScore() >= 12;
             }, "Mouse race");
+			HarpyHollowBonesEvolved.requireLevel(6).requirePerk(HarpyHollowBones).requireCustomFunction(function (player:Player):Boolean {
+				return player.harpyScore() >= 7 || player.sirenScore() >= 11 || player.thunderbirdScore() >= 11 || player.phoenixScore() >= 11 || player.couatlScore() >= 12;
+			}, "Harpy winged race");
 			HeartOfTheStormEvolved.requireLevel(6).requirePerk(HeartOfTheStorm).requireCustomFunction(function (player:Player):Boolean {
 				return player.raijuScore() >= 9 || player.thunderbirdScore() >= 11 || player.kamaitachiScore() >= 11 || player.couatlScore() >= 12;
 			}, "Stormborn race");
@@ -6145,7 +6160,7 @@ public class PerkLib
                 return player.pigScore() >= 8;
             }, "Pig/Boar race");
             SalamanderAdrenalGlandsEvolved.requireLevel(12).requirePerk(SalamanderAdrenalGlands).requireCustomFunction(function (player:Player):Boolean {
-                return player.salamanderScore() >= 7;
+                return player.salamanderScore() >= 9 || player.phoenixScore() >= 11;
             }, "Salamander race");
 			VampiricBloodsteamEvolved.requireLevel(12).requirePerk(VampiricBloodsteam).requireCustomFunction(function (player:Player):Boolean {
                 return player.hasStatusEffect(StatusEffects.VampireThirst);
@@ -6263,6 +6278,9 @@ public class PerkLib
 				.requireCustomFunction(function (player:Player):Boolean {
                 return player.mouseScore() >= 12;
             }, "Mouse race");
+			HarpyHollowBonesFinalForm.requireLevel(18).requirePerk(HarpyHollowBonesEvolved).requireCustomFunction(function (player:Player):Boolean {
+				return player.harpyScore() >= 8 || player.sirenScore() >= 12 || player.thunderbirdScore() >= 12 || player.phoenixScore() >= 12 || player.couatlScore() >= 13;
+			}, "Harpy winged race");
 			HeartOfTheStormFinalForm.requireLevel(18).requirePerk(HeartOfTheStormEvolved).requireCustomFunction(function (player:Player):Boolean {
 				return player.raijuScore() >= 12 || player.thunderbirdScore() >= 12 || player.kamaitachiScore() >= 12 || player.couatlScore() >= 13;
 			}, "Stormborn race");
@@ -6555,7 +6573,7 @@ public class PerkLib
                 return player.pigScore() >= 12;
             }, "Pig/Boar race");
             SalamanderAdrenalGlandsFinalForm.requireLevel(30).requirePerk(SalamanderAdrenalGlandsEvolved).requireCustomFunction(function (player:Player):Boolean {
-                return player.salamanderScore() >= 10;
+                return player.salamanderScore() >= 10 || player.phoenixScore() >= 13;
             }, "Salamander race");
 			VampiricBloodsteamFinalForm.requireLevel(30).requirePerk(VampiricBloodsteamEvolved).requireCustomFunction(function (player:Player):Boolean {
                 return player.hasStatusEffect(StatusEffects.VampireThirst);
@@ -6936,4 +6954,4 @@ public class PerkLib
 	}
 	initDependencies();
 }
-}
+}
